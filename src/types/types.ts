@@ -11,13 +11,13 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  role: string;
+  role: IRole | string;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 export interface IRole extends Document {
   name: string;
-  permissions: mongoose.Types.ObjectId;
+  permissions: IPermission[] | string[];
 }
 
 export interface IPermission extends Document {

@@ -2,9 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 import { _conf } from "../config/config";
-import { DecodedToken } from "../types/types";
+import { DecodedToken, IUser } from "../types/types";
 import User from "../models/User";
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: IUser;
+    }
+  }
+}
 export const authenticate = async (
   req: Request,
   res: Response,
@@ -23,6 +30,7 @@ export const authenticate = async (
     if (!user) {
       return next(createHttpError(401, "Invalid Authorization"));
     }
+    req.user = user;
   } catch (error) {
     return next(createHttpError(401, "Invalid Token"));
   }
